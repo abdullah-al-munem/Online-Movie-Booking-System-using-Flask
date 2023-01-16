@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log in</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <style>
+
+        body{
+			background-image: url(https://cdn.discordapp.com/attachments/1051562414405079135/1055219309921701928/image.png);
+		}
+        form{
+			font-size: 16px;
+			font-weight: bold;
+			font-family: Work Sans;
+		}
+		hr{
+			background-color: rgba(0,0,0,.4);
+			height: 1px;
+		}
+
+        .login-box{
+            font-family: sans-serif;
+            text-align: center;
+
+            width: 400px;
+
+            border-radius: 10px;
+            background-color: #72b7c0;
+            padding: 20px;
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        input[type=password], select {
+            width: 100%;
+            padding: 25px 15px;
+            margin: 10px 0px 10px 0px;
+            display: inline-block;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        input[type=text], select {
+            width: 100%;
+            padding: 25px 15px;
+            margin: 0px 0px 10px 0px;
+            display: inline-block;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        ::placeholder{
+            font: 16px sans-serif;
+            overflow: visible;
+        }
+        .btn-log, .btn-log:visited{
+            margin: 10px 0px 0px 0px;
+            width: 100%;
+            height: 55px;
+            border-radius:10px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+            color: #000 !important;
+            border: 3px solid #176DC1 !important;
+            background-color: #67B2FC !important;
+            font-size: 20px;
+        }
+        .btn-log:hover {
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+        .btn-log:active {
+            background-color: #56a0e9 !important;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+        .btn-new, .btn-new:visited{
+            width: 60%;
+            height: 55px;
+            border-radius:10px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+            color: #000 !important;
+            border: 3px solid #176DC1 !important;
+            background-color: #67B2FC !important;
+            font-size: 20px;
+        }
+        .btn-new:hover {
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+        .btn-new:active {
+            background-color: #56a0e9 !important;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class = "login-box">
+        <form onsubmit="loadDoc(); return false;">
+            <input required type = "text" id="email" name = "email" placeholder = "Email address or phone number">
+				<b style="color:red;" id="wronguser"></b>
+
+			<input required type = "password" id="password" name = "password" placeholder = "Password">
+                <b style="color:red;" id="wrongpass"></b>
+
+			<div style="margin: 0px 0px 20px 0px">
+				<input type="submit" class="btn-new" value="Log in">
+
+            </div>
+            <p id="i"></p>
+
+			<a href="reset" style="padding: 0px 0px 20px 0px;">Forgotten Password?</a>
+            <hr>
+        </form>
+        <div style="margin: 15px 0px 0px 0px">
+             <button type="submit" class="btn-new"><a href = "register">Create new account</a></button>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    function loadDoc(){
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/login");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        xhttp.send("email="+ email+ "&password="+ password);
+
+        xhttp.onload = function() {
+
+            console.log(this.responseText);
+            if (this.responseText == "wronguser"){
+                document.getElementById("wronguser").innerHTML = "This email or phone number does not exist!.";
+                document.getElementById("wrongpass").innerHTML = "";
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "wrongpass"){
+                document.getElementById("wronguser").innerHTML = "";
+                document.getElementById("wrongpass").innerHTML = '<div style="margin-bottom:15px;">Please insert correct password.</div>';
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "success"){
+                window.location.href= "/";
+            }
+        }
+    }
+</script>
+
+
+

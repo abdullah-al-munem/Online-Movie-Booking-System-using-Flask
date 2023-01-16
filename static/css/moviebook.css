@@ -1,0 +1,174 @@
+body{
+	font-family:Work Sans;
+	background-color:#051524;
+}
+div{
+}
+			
+.btn-hall{
+	font-family:Lato;
+	font-size:23px;
+	width: 110px;
+	height: 55px;
+    padding:0px;
+	border-radius:5px;
+	margin-right: 20px;
+	margin-top: 20px;
+}
+.btn-hall:hover,.btn-hall:active {  
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+}  
+.btn-cur-hall, .btn-cur-hall:visited{		 
+	color: #000 !important;
+	border: 2px solid #176DC1 !important;
+	background-color: #67B2FC !important;
+}
+.btn-cur-hall:active {  
+	background-color: #56a0e9 !important;
+	border: 3px solid #176DC1 !important;
+}         
+
+.btn-dif-hall, .btn-dif-hall:visited{ 
+	color: #000 !important;
+	border: 2px solid #D8D8D8 !important;
+	background-color: #FFFFFF !important;
+}  
+.btn-dif-hall:active {  
+	background-color: #eaeaea !important;
+	border: 3px solid #D8D8D8 !important;
+} 
+
+
+.btn-purchase, .btn-purchase:visited{	
+	font-family:Lato;
+	font-size:15px;
+	font-weight:bold;
+	text-transform: uppercase;
+	width: 100%;
+	height: 50px;
+	border-radius:10px;
+	margin: 0px 0px 10px 0px;
+	color: #000 !important;
+	border: 3px solid #176DC1 !important;
+	background-color: #67B2FC !important;
+}
+.btn-purchase:hover, .btn-purchase:active {  
+	box-shadow: 0px 3px 8px rgba(103, 178, 252, 1);
+}  
+
+.btn-purchase:active {  
+	background-color: #56a0e9 !important;
+}
+
+.btn-seat-selected{
+	background-image: url(https://ticket.cineplexbd.com/bc3d79147303d610100d26012f07228b.svg) !important;
+}
+.btn-seat-unavail{
+	background-image: url(https://ticket.cineplexbd.com/d57548eb16d7dbecc80c7cb0f3bcfd50.svg) !important;
+}
+.btn-seat-avail{
+	background-image: url(https://ticket.cineplexbd.com/68b34e3645c056fe6c73faff0c6d5890.svg) !important;
+}
+
+.btn-seat, .btn-seat:visited {
+    padding: 0px;
+	margin: 2px;	
+	font-family:Lato;
+	font-size:9px;
+	width: 23px;
+	height: 23px;
+	border: 0px solid rgba(0, 0, 0, 0) !important;
+	border-radius: 6px 6px 2px 2px;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.btn-seat:hover,  {
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.8);
+}  
+.btn-seat:active{
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.8);
+}   
+		
+.movie-description-table{
+	font-size:17px;
+}
+		
+td.ticket-description-table{
+	font-size:17px;
+	padding:17px 15px 17px 0px;
+}
+
+	
+.section-title{
+	margin-bottom:-8px;
+	font-size:20px;
+	font-weight: 1000;
+	text-transform: uppercase;
+}	
+.select-section{
+	padding: 15px 20px 20px 20px;
+	margin: 0px 0px;
+	border-radius: 10px;
+	background-color: #6FA4AB;
+}
+
+.ticket-info-section{
+	margin-top: 20px;
+	margin: 0px 0px 25px 0px;
+}
+
+
+.ticket-movie-description{
+	margin-top: 20px;
+	background-color: #C2E2E5;
+	border-radius: 10px;
+}
+
+.movie-description-poster{
+	width:100%;
+	background-color: rgba(255, 255, 255, 0.5);
+	border-radius: 10px;
+}
+
+.poster{
+	width:130px;
+	height:195px;
+	object-fit:cover;
+	border-radius:10px;
+}
+
+.movie-description{
+	padding: 15px 10px 0px 140px;
+	height:195px;
+	width:100%;
+}
+			
+.ticket-description{
+	padding: 10px 10px 10px 10px;
+}
+			
+.movie-title{
+	font-size:19px;
+	font-weight:bold;
+	display: block;
+	padding: 0px 0px 10px 0px;
+}	
+
+
+.seat-description-cover{
+	padding: 10px 40px;
+	margin-top: 20px;
+	width:100%;
+	background-color: #C2E2E5;
+	border-radius: 10px;
+}
+.seat-description{
+	overflow:auto;
+	height:510px;
+	width:100%;
+	background-color: rgba(255, 255, 255);
+	border-radius: 10px;
+}
+.seat-group{
+	padding: 20px 20px 20px 20px;
+}

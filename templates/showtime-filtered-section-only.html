@@ -1,0 +1,148 @@
+<html>
+	<head>
+	<title>Show Time</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans|Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/showtime.css') }}"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+			function changeButtonClass(id){
+			    id = '#'+id;
+                $(".nav li button").removeClass("btn-cur-date");
+                $(".nav li button").addClass("btn-dif-date");
+                console.log(id);
+                $(id).removeClass("btn-dif-date");
+                $(id).addClass("btn-cur-date");
+            }
+    </script>
+	</head>
+<body>
+	<div class="container">
+		<div class="select-section">
+			<div class="section-title">Select Date</div>
+
+			<ul class="nav nav-pills" id="pills-tab" role="tablist">
+				{% for date in dates %}
+				<li class="nav-item" role="presentation">
+					{% if date == dates[0] %}
+					<button onclick="changeButtonClass('pills-{{date}}-tab')" class="nav-link active btn-date btn-cur-date" id="pills-{{date}}-tab" data-bs-toggle="pill"
+							data-bs-target="#pills-{{date}}" type="button" role="tab" aria-controls="pills-{{date}}"
+							aria-selected="true">
+						{% else %}
+						<button onclick="changeButtonClass('pills-{{date}}-tab')" class="nav-link btn-date btn-dif-date" id="pills-{{date}}-tab" data-bs-toggle="pill"
+								data-bs-target="#pills-{{date}}" type="button" role="tab" aria-controls="pills-{{date}}"
+								aria-selected="false">
+							{% endif %}
+							<table style="margin-left:auto;margin-right:auto;">
+								<tr>
+									<td class="button-date">{{only_date[date]}}</td>
+									<td class="button-month-day">{{month_name[date]}}<br>{{weekday[date]}}</td>
+								</tr>
+							</table>
+						</button>
+				</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>
+
+	<div class="container">
+        <div class="select-section">
+            <div class="section-title">Select Movie</div>
+
+            <div class="tab-content" id="pills-tabContent">
+                {% for date in dates %}
+                {% if date == dates[0] %}
+                <div class="tab-pane fade show active" id="pills-{{date}}" role="tabpanel"
+                     aria-labelledby="pills-{{date}}-tab">
+                    {% else %}
+                    <div class="tab-pane fade" id="pills-{{date}}" role="tabpanel" aria-labelledby="pills-{{date}}-tab">
+                        {% endif %}
+                        {% for movie_id in shows[date] %}
+                        <div style="width:100%; height:20px;"></div>
+
+                        <!-- single movie section -->
+                        <div class="show-description">
+                            <div class="row g-0">
+                                <div class="col-sm-8 movie-description-poster">
+                                    <div class="">
+                                        <!-- poster -->
+                                        <div class="">
+                                            <img class="poster" src="{{movie_info_by_id[movie_id]['poster_url']}}"
+                                                 alt="poster">
+                                        </div>
+
+                                        <!-- description -->
+                                        <div class="movie-description">
+                                            <div class="movie-title">{{movie_info_by_id[movie_id]['title']}}</div>
+
+                                            <table class="table table-borderless description-table">
+                                                <tr>
+                                                    <td>Category</td>
+                                                    <td>{{movie_info_by_id[movie_id]['category']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Duration</td>
+                                                    <td>{{movie_info_by_id[movie_id]['duration']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Genre</td>
+                                                    <td>{{movie_info_by_id[movie_id]['genre']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Language</td>
+                                                    <td>{{movie_info_by_id[movie_id]['language']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Release</td>
+                                                    <td>{{movie_info_by_id[movie_id]['release']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Rating</td>
+                                                    <td>{{movie_info_by_id[movie_id]['rating']}}</td>
+                                                </tr>
+                                            </table>
+                                            <a href="http://127.0.0.1:5000/movies/{{movie_id}}"><button type="button" class="btn-details">Details</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 time-description">
+                                    <div>
+                                        <div class="section-title" style="text-align:center;padding:50px 0px 0px 0px;">
+                                            Select Time
+                                        </div>
+                                        <div style="text-align:center; padding-bottom:20px;">
+                                            {% for time in shows[date][movie_id] %}
+                                            <a href="http://127.0.0.1:5000/moviebook?movie_id={{movie_id}}&date={{date}}&time={{time}}">
+                                                <button type="button" class="btn-time">{{formatted_time[time]}}</button></a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- single movie section -->
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

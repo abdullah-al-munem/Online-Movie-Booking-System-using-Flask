@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <style>
+        body{
+			background-image: url(https://cdn.discordapp.com/attachments/1051562414405079135/1055219309921701928/image.png);
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .register-box{
+            width: 400px;
+            margin: auto;
+            font-family: sans-serif;
+            border-radius: 10px;
+            background-color: #72b7c0;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .container{
+            text-align: center;
+        }
+
+        input[type=text], input[type=password], input[type=email] {
+            width: 100%;
+            padding: 20px 15px;
+            margin: 0px 0px 20px 0px;
+            display: inline-block;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        ::placeholder{
+            font: 16px sans-serif;
+            overflow: visible;
+        }
+
+        .btn-new, .btn-new:visited{
+            width: 60%;
+            height: 55px;
+            border-radius:10px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+            color: #000 !important;
+            border: 3px solid #176DC1 !important;
+            background-color: #67B2FC !important;
+            font-size: 20px;
+        }
+
+        .btn-new:hover {
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-new:active {
+            background-color: #56a0e9 !important;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container register-box">
+        <form onsubmit="loadDoc(); return false;">
+            <input  required type ="text" name ="fullname" id ="fullname" placeholder ="Full Name">
+
+            <input required type="email" name="email" id="email" placeholder ="Email">
+            <b style="color:red;"id="emailexist"></b>
+
+            <input required type="text" name="phone" id="phone" placeholder ="Phone">
+            <b style="color:red;" id="phoneexist"></b>
+            <div style="color:red;" id="phoneinv"></div>
+
+            <input required type ="password" name ="password" id ="password" placeholder ="Password">
+            <b style="color:red;" id="short"></b>
+
+            <input required type="password" name="conf_password" id="conf_password" placeholder ="Confirm Password">
+            <div style="color:red;" id="wrongpass"></div>
+
+            <div style="margin: 10px 0px 0px 0px">
+            <input type="submit" class="btn-new" value="Sign up">
+            </div>
+
+            <p id="i"></p>
+            <a href = "login" style="padding: 20px">Already a user?</a>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+    function loadDoc(){
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/register");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        var fullname= document.getElementById("fullname").value;
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("phone").value;
+        var password = document.getElementById("password").value;
+        var conf_password = document.getElementById("conf_password").value;
+        xhttp.send("fullname="+ fullname+"&email="+ email+"&phone="+ phone+"&password="+ password+"&conf_password="+ conf_password);
+
+        xhttp.onload = function() {
+
+            console.log(this.responseText);
+            if (this.responseText == "emailexist"){
+                document.getElementById("emailexist").innerHTML = '<div style="margin-bottom:15px;">Email already exists.</div>';
+                document.getElementById("phoneexist").innerHTML = "";
+                document.getElementById("phoneinv").innerHTML = "";
+                document.getElementById("short").innerHTML = "";
+                document.getElementById("wrongpass").innerHTML = "";
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "phoneexist"){
+                document.getElementById("emailexist").innerHTML = "";
+                document.getElementById("phoneexist").innerHTML = '<div style="margin-bottom:15px;">Phone number already exists.</div>';
+                document.getElementById("phoneinv").innerHTML = "";
+                document.getElementById("short").innerHTML = "";
+                document.getElementById("wrongpass").innerHTML = "";
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "phoneinv"){
+                document.getElementById("emailexist").innerHTML = "";
+                document.getElementById("phoneexist").innerHTML = "";
+                document.getElementById("phoneinv").innerHTML = '<div style="margin-bottom:15px;">Invalid Phone number.</div>';
+                document.getElementById("short").innerHTML = "";
+                document.getElementById("wrongpass").innerHTML = "";
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "short"){
+                document.getElementById("emailexist").innerHTML = "";
+                document.getElementById("phoneexist").innerHTML = "";
+                document.getElementById("phoneinv").innerHTML = "";
+                document.getElementById("short").innerHTML = '<div style="margin-bottom:15px;">Password must be at least 8 characters.</div>';
+                document.getElementById("wrongpass").innerHTML = "";
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "wrongpass"){
+                document.getElementById("emailexist").innerHTML = "";
+                document.getElementById("phoneexist").innerHTML = "";
+                document.getElementById("phoneinv").innerHTML = "";
+                document.getElementById("short").innerHTML = "";
+                document.getElementById("wrongpass").innerHTML = '<div style="margin-bottom:15px;">Passwords do not match.</div>';
+                document.getElementById("i").innerHTML = "";
+            }
+            if (this.responseText == "success"){
+                window.location.href= "login";
+            }
+        }
+    }
+</script>

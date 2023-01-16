@@ -1,0 +1,283 @@
+<html>
+	<head>
+	<title>Movie Booking</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.1/css/all.css">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+		
+		
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans|Lato">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}"/>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/moviebook.css') }}"/>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+		<script>
+			var selectedSeats = [];
+			var selectedSeatIds = [];
+			var selectedHall = -1;
+
+			function changeButton(hall){
+				for (let i = 0; i < selectedSeatIds.length; i++) {
+					let seatId = selectedSeatIds[i];
+					$("#" + seatId).removeClass("btn-seat-selected");
+					$("#" + seatId).addClass("btn-seat-avail");
+				}
+				selectedHall = hall;
+				selectedSeats = [];
+				selectedSeatIds = [];
+				updateTicketInfo();
+
+				var btnId = "#" + hall + "-btn";
+				var seatSectId = "#" + hall + "-seat-sect";
+				var ticketId = "#" + hall + "-ticket";
+
+
+				$(".btn-hall").removeClass("btn-cur-hall");
+				$(".btn-hall").addClass("btn-dif-hall");
+
+				$(btnId).removeClass("btn-dif-hall");
+				$(btnId).addClass("btn-cur-hall");
+
+				$(".seat-description-cover").addClass("d-none");
+				$(seatSectId).removeClass("d-none");
+
+				$(".ticket-movie-description").addClass("d-none");
+				$(ticketId).removeClass("d-none");
+			}
+
+			window.onload = function(){
+				var hall_seats = {{hall_seats|tojson}};
+				for(var hall in hall_seats){
+					if(selectedHall == -1){
+						selectedHall = hall;
+					}
+					for(var row in hall_seats[hall]){
+						for(var col in hall_seats[hall][row]){
+							var seatId = "seat"+"-"+hall+"-"+row+"-"+col;
+							if (hall_seats[hall][row][col]){
+								$("#" + seatId).addClass("btn-seat-unavail");
+							}
+							else{
+								$("#" + seatId).addClass("btn-seat-avail");
+							}
+						}
+					}
+				}
+				reloadSeats();
+			};
+			function reloadSeats(){
+				changeButton(selectedHall)
+				setTimeout(reloadSeats, 60000);
+			}
+
+			function selectSeat(hall, row, col){
+				var seatHallNo = hall+"-"+row+"-"+col;
+				var seatId = "seat-" + seatHallNo;
+				if(document.getElementById(seatId).classList.contains("btn-seat-unavail")){
+					return;
+				}
+				else if(document.getElementById(seatId).classList.contains("btn-seat-selected")){
+					$("#" + seatId).removeClass("btn-seat-selected");
+					$("#" + seatId).addClass("btn-seat-avail");
+
+					selectedSeats.splice(selectedSeats.indexOf(seatHallNo), 1);
+					selectedSeatIds.splice(selectedSeatIds.indexOf(seatId), 1);
+					updateTicketInfo();
+
+					return;
+				}
+				else{
+					if(selectedSeats.length < 4){
+						$("#" + seatId).removeClass("btn-seat-avail");
+						$("#" + seatId).addClass("btn-seat-selected");
+
+						selectedSeats.push(seatHallNo);
+						selectedSeatIds.push(seatId);
+						updateTicketInfo();
+						return;
+					}
+					else {
+						alert("You cannot select more than 4 seats.");
+					}
+				}
+			}
+
+			function updateTicketInfo(){
+				let ticketQuantityId = "ticket-quantity-" + selectedHall;
+				if (selectedSeats.length > 0){
+					document.getElementById(ticketQuantityId).innerHTML = selectedSeats.length;
+				}
+				else{
+					document.getElementById(ticketQuantityId).innerHTML = "--";
+				}
+
+				let selectedSeatsId = "selected-seats-" + selectedHall;
+				if (selectedSeats.length > 0){
+					let selectedSeatsPresented = []
+					for (let i = 0; i < selectedSeats.length; i++){
+						let s = selectedSeats[i].split("-");
+						selectedSeatsPresented.push(s[1]+s[2]);
+					}
+					selectedSeatsPresented.sort();
+					document.getElementById(selectedSeatsId).innerHTML = selectedSeatsPresented;
+				}
+				else{
+					document.getElementById(selectedSeatsId).innerHTML = "--";
+				}
+
+				let totalAmountId = "total-amount-" + selectedHall;
+				if (selectedSeats.length > 0){
+					document.getElementById(totalAmountId).innerHTML = selectedSeats.length * 400;
+				}
+				else{
+					document.getElementById(totalAmountId).innerHTML = "--";
+				}
+			}
+
+			function purchaseTicket(){
+				if (selectedSeats.length == 0) {
+					alert("You have not selected any seat.");
+					return;
+				}
+
+				const xhttp = new XMLHttpRequest();
+
+				xhttp.open("POST", "/moviebook");
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+				var params = "selectedHall=" + selectedHall + "&selectedSeats=" + JSON.stringify(selectedSeats) + "&movie_id=" + "{{movie_id}}" + "&date=" + "{{get_date}}" + "&time=" + "{{get_time}}";
+				xhttp.send(params);
+
+				xhttp.onload = function() {
+					console.log(this.responseText);
+					if(this.responseText == "True"){
+						alert("Tickets purchase is successful!");
+						window.location.href = "/showtime";
+					}
+					else{
+						alert("Sorry! Some of the seats have already been selected");
+						location.reload();
+					}
+				}
+			}
+		</script>
+
+	</head>
+	<body>
+	{% include "header.html" %}
+		<div class="container" style="padding-top:1.5rem">
+			<div class="row gx-4 gy-4">
+				<div class="col-xl-8 col-md-12">
+					<div class="row gy-4">
+						<div class="col-12">
+
+							<div class="select-section">
+								<div class="section-title">Select Hall</div>
+
+								{% for hall in halls %}
+										{% if hall == halls[0] %}
+											<button onclick="changeButton('{{hall}}')" class="btn-hall btn-cur-hall" id="{{hall}}-btn">
+										{% else %}
+											<button onclick="changeButton('{{hall}}')" class="btn-hall btn-dif-hall" id="{{hall}}-btn">
+										{% endif %}
+											Hall {{hall}}
+										</button>
+								{% endfor %}
+
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="select-section">
+								<div class="section-title">Select Seat</div>
+								{% for hall in halls %}
+									{% if hall == halls[0] %}
+									<div class="seat-description-cover" id="{{hall}}-seat-sect">
+									{% else %}
+									<div class="seat-description-cover d-none" id="{{hall}}-seat-sect">
+									{% endif %}
+										<div class="seat-description">
+											<div style="text-align:right;padding: 20px;">
+												<img width="20" height="20" src="https://ticket.cineplexbd.com/d57548eb16d7dbecc80c7cb0f3bcfd50.svg">
+												Unavailable
+												<img width="20" height="20" src="https://ticket.cineplexbd.com/ed63bffeab122d4aa21f7e8592da492e.svg">
+												Available
+												<img width="20" height="20" src="https://ticket.cineplexbd.com/bc3d79147303d610100d26012f07228b.svg">
+												Selected
+											</div>
+											<!-- seats -->
+											<div class="seat-group">
+												<table style="margin:auto;">
+													{% for row in hall_seats[hall] %}
+														<tr>
+															{% for col in hall_seats[hall][row] %}
+																<td><button onclick="selectSeat('{{hall}}','{{row}}','{{col}}')" type="button" class="btn-seat" id="seat-{{hall}}-{{row}}-{{col}}">{{row}}{{col}}</button></td>
+															{% endfor %}
+														</tr>
+													{% endfor %}
+												</table>
+											</div>
+											<!-- seats -->
+											<div style="text-align: center;">
+												Theatre Screen
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-md-12">
+					<div class="select-section ticket-info-section">
+						<div class="section-title">Ticket Information</div>
+						{% for hall in halls %}
+							{% if hall == halls[0] %}
+								<div class="ticket-movie-description" id="{{hall}}-ticket">
+							{% else %}
+								<div class="ticket-movie-description d-none" id="{{hall}}-ticket">
+							{% endif %}
+									<div class="movie-description-poster">
+										<!-- poster -->
+										<img src="{{movie['poster_url']}}" alt="poster" class="poster" style="float:left;">
+
+										<!-- description -->
+										<div class="movie-description">
+											<div class="movie-title">{{movie['title']}}</div>
+
+											<table class="table table-borderless movie-description-table">
+												<tr> <td>Duration</td> <td class="text-end">{{movie['duration']}}</td> </tr>
+												<tr> <td>Category</td><td class="text-end">{{movie['category']}}</td> </tr>
+												<tr> <td>Language</td><td class="text-end">{{movie['language']}}</td> </tr>
+											</table>
+										</div>
+									</div>
+									<div class="ticket-description">
+										<table class="table table-borderless">
+											<tr> <td class="ticket-description-table"><i class="fa fa-solid fa-location-dot"></i></td> <td class="ticket-description-table">Location</td>  <td class="ticket-description-table text-end">{{cur_location}}</td> </tr>
+											<tr> <td class="ticket-description-table"><i class="fa fa-regular fa-calendar"></i></td> <td class="ticket-description-table"> Show Date</td> <td class="ticket-description-table text-end">{{date}}</td> </tr>
+											<tr> <td class="ticket-description-table"><i class="fa fa-regular fa-clock"></i></td> <td class="ticket-description-table">Show Time</td>  <td class="ticket-description-table text-end">{{time}}</td> </tr>
+											<tr> <td class="ticket-description-table"><i class="fa fa-solid fa-film"></i></td> <td class="ticket-description-table"> Hall</td>  <td class="ticket-description-table text-end">Hall {{hall}}</td> </tr>
+											<tr> <td class="ticket-description-table"><i class="fa fa-solid fa-ticket"></i></td> <td class="ticket-description-table"> Ticket Quantity</td> <td class="ticket-description-table text-end" id="ticket-quantity-{{hall}}">--</td> </tr>
+											<tr> <td class="ticket-description-table"><i class="fa fa-solid fa-chair"></i></td> <td class="ticket-description-table"> Selected Seats</td> <td class="ticket-description-table text-end" id="selected-seats-{{hall}}">--</td> </tr>
+											<tr> <td class="ticket-description-table"><i class="fa fa-solid fa-credit-card"></i></td> <td class="ticket-description-table"> Total Amount</td> <td class="ticket-description-table text-end" id="total-amount-{{hall}}">--</td> </tr>
+										</table>
+										<button onclick="purchaseTicket()" type="button" class="btn-purchase">Purchase Ticket</button>
+										<span style="font-size:12px;">By purchase tickets, you are accepting our Terms & Conditions.</span>
+									</div>
+								</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+    {% include "footer.html" %}
+	</body>
+</html>
+

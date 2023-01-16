@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>List of Screenings</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/admin-crud.css') }}"/>
+
+    <script>
+        window.onload = function(){
+            $(".update-section").hide();
+        };
+
+        function toggleUpdate(id){
+            id = "#" + id;
+            console.log(id);
+            $(id).toggle();
+        };
+
+
+    </script>
+
+</head>
+<body>
+<div class="container form-section">
+
+    <div class="container form-container">
+
+        <div class="container mt-3">
+
+            <h2>List of Screenings</h2>
+                {% for screening in screenings %}
+                    <div class="input-group mb-3 mt-3">
+                        <input disabled type="text" class="form-control" value="Location: {{screening['location']}}; Date: {{screening['date']}}; Time: {{screening['time']}}; Hall: Hall{{screening['hall']}}" aria-label="screening['_id']">
+                        <button class="btn btn-outline-primary" onclick="toggleUpdate('update-section-{{screening['_id']}}')" type="button" id="update-{{screening['id']}}">Update</button>
+                        <button class="btn btn-outline-primary" type="button" id="delete-{{screening['id']}}">Delete</button>
+
+                        <!-- Update section -->
+                        <div class="container form-container update-section" id="update-section-{{screening['_id']}}">
+                            <!-- The Modal -->
+                            <div class="modal" id="modal-screen-update-{{screening['_id']}}">
+                                <div class="modal-dialog modal-fullscreen-sm-down">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Message</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body" id="modal-screen-update-message-{{screening['_id']}}">Updated successfully.</div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container mt-3">
+
+                                <h2>Update Screening</h2>
+                                <p>Provide screening information below:</p>
+
+                                <form onsubmit="submitUpdateScreeningForm('{{screening['_id']}}');return false;">
+                                    <div class="form-floating mb-3">
+                                        <select required class="form-select" name="movie_id-{{screening['_id']}}" id="movie_id-{{screening['_id']}}" aria-label="Floating label select">
+                                            <option value="">Select a movie</option>
+                                            {% for movie in movies %}
+                                                {% if movie['_id']|string == screening['movie_id'] %}
+                                                    <option selected value="{{movie['_id']}}">{{movie["title"]}}</option>
+                                                {% else %}
+                                                    <option value="{{movie['_id']}}">{{movie["title"]}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="movie_id-{{screening['_id']}}">Movie</label>
+                                    </div>
+
+
+                                    <div class="form-floating mb-3">
+                                        <select required class="form-select" name="location-{{screening['_id']}}" id="location-{{screening['_id']}}">
+                                            <option value="">Select location</option>
+                                            {% if screening['location'] == "Aftab Nagar" %}
+                                                <option selected value="Aftab Nagar">Aftab Nagar</option>
+                                                <option value="Bashundhara">Bashundhara</option>
+                                            {% else %}
+                                                <option value="Aftab Nagar">Aftab Nagar</option>
+                                                <option selected value="Bashundhara">Bashundhara</option>
+                                            {% endif %}
+                                        </select>
+                                        <label for="location-{{screening['_id']}}">Location</label>
+                                    </div>
+
+
+                                    <div class="form-floating mb-3">
+                                        <input required type="date" name="date-{{screening['_id']}}" id="date-{{screening['_id']}}" class="form-select" value="{{screening['date']}}">
+                                        <label for="date-{{screening['_id']}}">Date</label>
+                                    </div>
+
+
+                                    <div class="form-floating mb-3">
+                                        <input required type="time" name="time-{{screening['_id']}}" id="time-{{screening['_id']}}" class="form-select" value="{{screening['time']}}">
+                                        <label for="time-{{screening['_id']}}">Time</label>
+                                    </div>
+
+
+                                    <div class="form-floating mb-3 mt-3">
+                                        <input required type="number" class="form-control" id="hall-{{screening['_id']}}" placeholder="Enter hall number" name="hall-{{screening['_id']}}" min="1" value="{{screening['hall']}}">
+                                        <label for="hall-{{screening['_id']}}">Hall number</label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+
+                            </div>
+                            <script>
+                                function submitUpdateScreeningForm(screening_id) {
+                                    console.log("movie_id-"+screening_id);
+                                    var movie_id = document.getElementById("movie_id-"+screening_id).value;
+                                    var location = document.getElementById("location-"+screening_id).value;
+                                    var date = document.getElementById("date-"+screening_id).value;
+                                    var time = document.getElementById("time-"+screening_id).value;
+                                    var hall = document.getElementById("hall-"+screening_id).value;
+
+                                    const xhttp = new XMLHttpRequest();
+                                    xhttp.onload = function() {
+                                        $("#modal-screen-update-"+screening_id).modal('show');
+                                    }
+                                    xhttp.open("POST", "/updatescreening");
+                                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                                    var params = "_id=" + screening_id + "&movie_id=" + movie_id + "&location=" + location + "&date=" + date + "&time=" + time + "&hall=" + hall;
+                                    xhttp.send(params);
+                                }
+                            </script>
+                        </div>
+                        <!-- Update section -->
+
+                    </div>
+                {% endfor %}
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+</html>
+

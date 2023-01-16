@@ -1,0 +1,101 @@
+<script>
+
+
+</script>
+
+<header>
+	<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+	<div class="container">
+	<a class="navbar-brand" href="/">Website Name</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	  <!-- -->
+	  <form class="my-2 my-lg-0" action="{{ url_for('search') }}" method="post">
+		<div class="row ml-40">
+			<div class="col-sm-10">
+			  <input class="form-control search-form" type="search" name="search" placeholder="Search for Movies and News" aria-label="Search for Movies and News">
+			</div>
+			<button class="col-sm-2 btn-primary btn my-2 my-sm-0" type="submit" name="search_mn">Search</button>
+		</div>
+		</form>
+
+	  </div>
+		{% if 'logged_in' in session %}
+	  		<a class="btn btn-primary navbar-right" href="{{ url_for('logout') }}" style="float:right;" >Sign Out</a>
+		{% else %}
+	  		<a class="btn btn-primary navbar-right" href="{{ url_for('login') }}" style="float:right;" >Sign In</a>
+		{% endif %}
+	</div>
+
+	</nav>
+
+	<nav class="bg-nav2 navbar navbar-expand-lg navbar-light border-bottom">
+
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+
+	  <div class="container justify-content-center justify-content-md-between collapse navbar-collapse" id="navbarSupportedContent2">
+		<ul class="navbar-nav nav-tabs mr-auto">
+		  <li class="nav-item active">
+			<a id="home" class="nav-link {{ 'active' if request.path == url_for('index') }}" href="/">HOME </a>
+		  </li>
+		  <li class="nav-item">
+			<a id="showtime" class="nav-link {{ 'active' if request.path == url_for('showtime') }}" href="/showtime">SHOWTIME</a>
+		  </li>
+		  <li class="nav-item">
+			<a id="ticket_price" class="nav-link {{ 'active' if request.path == url_for('ticket_price') }}" href="/ticket_price">TICKET PRICE</a>
+		  </li>
+		  <li class="nav-item">
+			<a id="news" class="nav-link {{ 'active' if request.path == url_for('news') }}" href="/news">NEWS</a>
+		  </li>
+		  <li class="nav-item">
+			<a id="about_us" class="nav-link {{ 'active' if request.path == url_for('about_us') }}" href="/about_us">ABOUT US</a>
+		  </li>
+		  <li class="nav-item">
+			<a id="contact_us" class="nav-link {{ 'active' if request.path == url_for('contact_us') }}" href="/contact_us">CONTACT US</a>
+		  </li>
+
+		</ul>
+
+{#         <form action="{{url_for('index')}}" method="post">#}
+             <select id="selectOp" name="hall" id="hall" onchange="selectOp();">
+              <option disabled selected value> {{ tmp }} </option>
+              <option >
+                Bashundhara
+              </option>
+              <option >
+                Aftab Nagar
+              </option>
+            </select>
+{#         </form>#}
+
+		<img src="{{ url_for('static', filename='img/location.png ') }}" class="img-fluid" width="30px" height="30px">
+
+	  </div>
+
+	</nav>
+</header>
+
+<script>
+function selectOp() {
+  {#var s = document.getElementById("selectOp").getElementsByTagName('option')[0].selected = 'selected';#}
+    var selectBox = document.getElementById("selectOp");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    {#document.getElementById('selectOp').getElementsByTagName('option')[selectBox.selectedIndex].selected = 'selected'#}
+
+  console.log(selectedValue)
+    const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    {#document.getElementById("ph").innerHTML = this.responseText;#}
+      location.reload()
+      document.getElementById('selectOp').getElementsByTagName('option')[selectBox.selectedIndex].selected = 'selected'
+  }
+  xhttp.open("POST", "/");
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("hall="+ selectedValue);
+}
+</script>
