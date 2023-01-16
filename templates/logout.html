@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log out</title>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <style>
+        body{
+			background-image: url(https://cdn.discordapp.com/attachments/1051562414405079135/1055219309921701928/image.png);
+            font-size: 16px;
+            font-weight: bold;
+        }
+        form{
+			font-size: 16px;
+			font-weight: bold;
+			font-family: Work Sans;
+		}
+		hr{
+			background-color: rgba(0,0,0,.4);
+			height: 1px;
+		}
+
+        .logout-box{
+            font-family: sans-serif;
+            text-align: center;
+
+            width: 400px;
+
+            border-radius: 10px;
+            background-color: #72b7c0;
+            padding: 20px;
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        input[type=text], input[type=password], input[type=email] {
+            width: 100%;
+            padding: 20px 15px;
+            margin: 0px 0px 20px 0px;
+            display: inline-block;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        ::placeholder{
+            font: 16px sans-serif;
+            overflow: visible;
+        }
+
+        .btn-new, .btn-new:visited{
+            width: 60%;
+            height: 55px;
+            border-radius:10px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+            color: #000 !important;
+            border: 3px solid #176DC1 !important;
+            background-color: #67B2FC !important;
+            font-size: 20px;
+        }
+        .btn-new:hover {
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+        .btn-new:active {
+            background-color: #56a0e9 !important;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="logout-box">
+        <p>You are already logged in.</p>
+        <button class="btn-new"><a href="/logout">logout</a></button>
+    </div>
+</body>
+</html>

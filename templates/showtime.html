@@ -1,0 +1,367 @@
+<html>
+<head>
+    <title>Show Time</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans|Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+          integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/showtime.css') }}"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+			function changeButtonClass(id){
+			    id = '#'+id;
+                $(".nav li button").removeClass("btn-cur-date");
+                $(".nav li button").addClass("btn-dif-date");
+                console.log(id);
+                $(id).removeClass("btn-dif-date");
+                $(id).addClass("btn-cur-date");
+            }
+
+            window.onload = function(){
+                $(".filter-section").hide();
+            };
+
+            function toggleFilter(){
+                $('.filter-section').slideToggle('slow');
+            }
+
+            function filter(){
+                var categories=[];
+                elem = document.querySelectorAll('#fil-category [id]');
+                for(let i = 0; i < elem.length; i++){
+                    if($('#'+elem[i].id).is(":checked")){
+                        categories.push(document.getElementById(elem[i].id).value);
+                    }
+                }
+
+                var genres = [];
+                elem = document.querySelectorAll('#fil-genre [id]');
+                for(let i = 0; i < elem.length; i++){
+                    if($('#'+elem[i].id).is(":checked")){
+                        genres.push(document.getElementById(elem[i].id).value);
+                    }
+                }
+
+                var languages = [];
+                elem = document.querySelectorAll('#fil-language [id]');
+                for(let i = 0; i < elem.length; i++){
+                    if($('#'+elem[i].id).is(":checked")){
+                        languages.push(document.getElementById(elem[i].id).value);
+                    }
+                }
+
+                var weekdays = [];
+                elem = document.querySelectorAll('#fil-weekday [id]');
+                for(let i = 0; i < elem.length; i++){
+                    if($('#'+elem[i].id).is(":checked")){
+                        weekdays.push(document.getElementById(elem[i].id).value);
+                    }
+                }
+
+
+                var rating   =  [parseInt(document.getElementById("ratingFrom").value),
+                                 parseInt(document.getElementById("ratingTo").value)];
+                if (rating[0] > rating[1]) {
+                    alert("Rating is invalid");
+                    return;
+                }
+
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    document.getElementById("filtered-showtime-section").innerHTML = this.responseText;
+                }
+                xhttp.open("POST", "/showtime");
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                params = "categories=" + JSON.stringify(categories) +
+                         "&genres=" + JSON.stringify(genres) +
+                         "&languages=" + JSON.stringify(languages) +
+                         "&weekdays=" + JSON.stringify(weekdays) +
+                         "&rating=" + JSON.stringify(rating);
+                        console.log(params);
+                xhttp.send(params);
+            }
+
+
+    </script>
+</head>
+<body>
+{% include "header.html" %}
+<div>
+    <div class="container">
+        <div class="select-section">
+            <div class="section-title" style="margin-bottom:0px;">Filter<button type="button" onclick="toggleFilter()" class="btn float-end"><i class="fa-solid fa-bars"></i></button></div>
+
+            <div class="show-description filter-section" style="margin-top:20px;">
+                <div style="margin-left:15px; padding: 5px 0px 15px 0px;">
+
+                    <div class="mt-2" id="fil-category">
+                        Category:
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="category3D" value="3D" checked>
+                            <label class="form-check-label" for="category3D">3D</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="category2D" value="2D" checked>
+                            <label class="form-check-label" for="category2D">2D</label>
+                        </div>
+                    </div>
+
+                    <div class="mt-2" id="fil-genre">
+                        <table>
+                            <tr>
+                                <td style="vertical-align:top">Genre:</td>
+                                <td>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="genAction"
+                                                   value="Action" checked>
+                                            <label class="form-check-label" for="genAction">Action</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="genAdventure"
+                                                   value="Adventure" checked>
+                                            <label class="form-check-label" for="genAdventure">Adventure</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="genThriller"
+                                                   value="Thriller" checked>
+                                            <label class="form-check-label" for="genThriller">Thriller</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="genComedy"
+                                                   value="Comedy" checked>
+                                            <label class="form-check-label" for="genComedy">Comedy</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="genHorror"
+                                                   value="Horror" checked>
+                                            <label class="form-check-label" for="genHorror">Horror</label>
+                                        </div>
+                                    </div>
+                                </td>
+                        </table>
+                    </div>
+
+                    <div class="mt-2" id="fil-language">
+                        Language:
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="languageEnglish" value="English"
+                                   checked>
+                            <label class="form-check-label" for="languageEnglish">English</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="languageBangla" value="Bangla"
+                                   checked>
+                            <label class="form-check-label" for="languageBangla">Bangla</label>
+                        </div>
+                    </div>
+
+                    <div class="mt-2" id="fil-weekday">
+                        <table>
+                            <tr>
+                                <td style="vertical-align:top">Weekdays:</td>
+                                <td>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="daySun" value="Sun"
+                                                   checked>
+                                            <label class="form-check-label" for="daySun">Sunday</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dayMon" value="Mon"
+                                                   checked>
+                                            <label class="form-check-label" for="dayMon">Monday</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dayTue" value="Tue"
+                                                   checked>
+                                            <label class="form-check-label" for="dayTue">Tuesday</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dayWed" value="Wed"
+                                                   checked>
+                                            <label class="form-check-label" for="dayWed">Wednesday</label>
+                                        </div>
+                                        <br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dayThu" value="Thu"
+                                                   checked>
+                                            <label class="form-check-label" for="dayThu">Thursday</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dayFri" value="Fri"
+                                                   checked>
+                                            <label class="form-check-label" for="dayFri">Friday</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="daySat" value="Sat"
+                                                   checked>
+                                            <label class="form-check-label" for="daySat">Saturday</label>
+                                        </div>
+                                    </div>
+                                </td>
+                        </table>
+                    </div>
+
+                    <div class="mt-2" id="fil-rating">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div style="margin-right:10px">
+                                        <label class="mb-2" for="ratingFrom">Rating from:</label>
+                                        <input class="form-control" type="number" id="ratingFrom" value="0" min="0"
+                                               max="10" step=".1">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-right:10px">
+                                        <label class="mb-2" for="ratingTo">Rating to:</label>
+                                        <input class="form-control" type="number" id="ratingTo" value="10" min="0"
+                                               max="10" step=".1">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button type="button" onclick="filter()" class="btn-date btn-cur-date btn-filter mt-3">Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="filtered-showtime-section">
+        <div class="container">
+            <div class="select-section">
+                <div class="section-title">Select Date</div>
+
+                <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                    {% for date in dates %}
+                    <li class="nav-item" role="presentation">
+                        {% if date == dates[0] %}
+                        <button onclick="changeButtonClass('pills-{{date}}-tab')" class="nav-link active btn-date btn-cur-date" id="pills-{{date}}-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-{{date}}" type="button" role="tab" aria-controls="pills-{{date}}"
+                                aria-selected="true">
+                        {% else %}
+                        <button onclick="changeButtonClass('pills-{{date}}-tab')"  class="nav-link btn-date btn-dif-date" id="pills-{{date}}-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-{{date}}" type="button" role="tab" aria-controls="pills-{{date}}"
+                                aria-selected="false">
+                        {% endif %}
+                            <table style="margin-left:auto;margin-right:auto;">
+                                <tr>
+                                    <td class="button-date">{{only_date[date]}}</td>
+                                    <td class="button-month-day">{{month_name[date]}}<br>{{weekday[date]}}</td>
+                                </tr>
+                            </table>
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="container">
+        <div class="select-section">
+            <div class="section-title">Select Movie</div>
+
+            <div class="tab-content" id="pills-tabContent">
+                {% for date in dates %}
+                {% if date == dates[0] %}
+                <div class="tab-pane fade show active" id="pills-{{date}}" role="tabpanel"
+                     aria-labelledby="pills-{{date}}-tab">
+                    {% else %}
+                    <div class="tab-pane fade" id="pills-{{date}}" role="tabpanel" aria-labelledby="pills-{{date}}-tab">
+                        {% endif %}
+                        {% for movie_id in shows[date] %}
+                        <div style="width:100%; height:20px;"></div>
+
+                        <!-- single movie section -->
+                        <div class="show-description">
+                            <div class="row g-0">
+                                <div class="col-xxl-8 movie-description-poster">
+                                    <div class="">
+                                        <!-- poster -->
+                                        <div class="">
+                                            <img class="poster" src="{{movie_info_by_id[movie_id]['poster_url']}}"
+                                                 alt="poster">
+                                        </div>
+
+                                        <!-- description -->
+                                        <div class="movie-description">
+                                            <div class="movie-title">{{movie_info_by_id[movie_id]['title']}}</div>
+
+                                            <table class="table table-borderless description-table">
+                                                <tr>
+                                                    <td>Category</td>
+                                                    <td>{{movie_info_by_id[movie_id]['category']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Duration</td>
+                                                    <td>{{movie_info_by_id[movie_id]['duration']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Genre</td>
+                                                    <td>{{movie_info_by_id[movie_id]['genre']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Language</td>
+                                                    <td>{{movie_info_by_id[movie_id]['language']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Release</td>
+                                                    <td>{{movie_info_by_id[movie_id]['release']}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Rating</td>
+                                                    <td>{{movie_info_by_id[movie_id]['rating']}}</td>
+                                                </tr>
+                                            </table>
+                                            <a href="movies/{{movie_id}}"><button type="button" class="btn-details">Details</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xxl-4 time-description">
+                                    <div>
+                                        <div class="section-title" style="text-align:center;padding:50px 0px 0px 0px;">
+                                            Select Time
+                                        </div>
+                                        <div style="text-align:center; padding-bottom:20px;">
+                                            {% for time in shows[date][movie_id] %}
+                                            <a href="http://127.0.0.1:5000/moviebook?movie_id={{movie_id}}&date={{date}}&time={{time}}">
+                                                <button type="button" class="btn-time">{{formatted_time[time]}}</button></a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- single movie section -->
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    {% include "footer.html" %}
+
+<script>
+</script>
+</body>
+</html>
+

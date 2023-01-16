@@ -1,0 +1,23 @@
+body{
+    font-family: var(--bs-body-font-family);
+	background-color:#051524;
+}
+.form-section{
+    padding: 25px 30px 40px 30px;
+    background-color: #6FA4AB;
+}
+.form-container{
+    padding-top:10px;
+    padding-bottom:20px;
+    background-color: #FFF;
+    border-radius: 10px;
+    width:100%;
+}
+.tab-container{
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-right:10px;
+    padding-left:10px;
+    background-color: #FFF;
+    border-radius: 10px;
+}

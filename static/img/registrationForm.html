@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+    <style>
+        body{
+			background-image: url(https://cdn.discordapp.com/attachments/1051562414405079135/1055219309921701928/image.png);
+            font-size: 16px;
+            font-weight: bold;
+        }
+        form{
+        }
+
+        .register-box{
+            height: 500px;
+            width: 400px;
+            margin: auto;
+            font-family: sans-serif;
+            border-radius: 22px;
+            background-color: #B0D2D6;
+            padding: 20px;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            border: 1.5px solid black
+        }
+        .container{
+            text-align: center;
+            border: 2px solid #B0D2D6;
+        }
+        input[type=password], select {
+            width: 100%;
+            margin: 0px 0px 20px 0px;
+            padding: 20px 15px;
+            display: inline-block;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type=text], select {
+            width: 100%;
+            padding: 20px 15px;
+            margin: 0px 0px 20px 0px;
+            display: inline-block;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 14px;
+            box-sizing: border-box;
+        }
+
+        ::placeholder{
+            font: 16px sans-serif;
+            overflow: visible;
+        }
+
+        .btn-new, .btn-new:visited{
+            width: 60%;
+            height: 55px;
+            border-radius:14px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+            color: #000 !important;
+            border: 3px solid #176DC1 !important;
+            background-color: #67B2FC !important;
+            font-size: 20px;
+        }
+        .btn-new:hover {
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+        .btn-new:active {
+            background-color: #56a0e9 !important;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="container register-box">
+   <form>
+  <!-- <form action='/register' method="POST"> -->
+    <input type = "text" name = "fullname" placeholder = "Full name">
+    <input type="text" name="email" placeholder = "Email address">
+    <input type="text" name="phone" placeholder = "Phone number">
+    <input type = "password" name = "password" placeholder = "Password">
+    <input type="password" name="confirm_password" placeholder = "Confirm password">
+    <div style="margin: 10px 0px 0px 0px">
+        <button type="submit" class="btn-new">Sign up</button>
+    </div>
+    <div style="padding: 20px">Already a user?</div>
+  </form>
+</div>
+</body>
+</html>

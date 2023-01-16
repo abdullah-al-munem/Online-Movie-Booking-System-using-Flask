@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Website Name</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans|Lato">
+
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+        <link rel="stylesheet" type="text/css" href="static/css/index.css"/>
+		<style>
+			.active_bg{
+				color:black;
+				background-color: whitesmoke;
+			}
+			.remove_bg{
+				color:red;
+				background-color: transparent;
+			}
+			.movie_img {
+			  display: block;
+			  max-width:230px;
+			  max-height:95px;
+			  width: auto;
+			  height: auto;
+			}
+		</style>
+		<script>
+			function func_showing() {
+			  var element1 = document.getElementById("id_coming");
+			  var element2 = document.getElementById("id_showing");
+			  element1.classList.remove("active");
+			  element1.classList.add("remove_bg");
+			  element2.classList.add("active");
+			  element2.classList.add("active_bg");
+
+			  var html = `
+						  <div class="row">
+							{% for i in range(4)%}
+							{% if i >= total_movie %}
+							<div class="col movie-sub1 card m-2" style="width: 18rem;">
+							</div>
+							{% else %}
+							<div class="col movie-sub1 card m-2" style="width: 18rem;">
+							  <img src="{{movie_info_by_id_sorted[i]['poster_url']}}" class="card-img-top"  alt="...">
+							  <div class="card-body">
+							<h5 class="card-title" style="color:ghostwhite">{{movie_info_by_id_sorted[i]['title']}}</h5>
+							<p class="card-text"></p>
+							<a href="/movies/{{movie_info_by_id_sorted[i]['_id']}}" class="btn btn-primary">Get Tickets</a>
+							  </div>
+							</div>
+							{% endif %}
+
+							{% endfor %}
+						  </div>
+						`;
+			  var elementDiv = document.getElementById("showing_movies");
+			  elementDiv.innerHTML = html
+				document.getElementById("see_all").href="/movies/1";
+
+
+			  // const xhttp = new XMLHttpRequest();
+			  // xhttp.onload = function() {
+				// console.log("Okay")
+			  // }
+			  // xhttp.open("POST", "/");
+			  // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			  // var flg = "1";
+			  // xhttp.send("flg="+ flg);
+			}
+			function func_coming() {
+			  var element1 = document.getElementById("id_coming");
+			  var element2 = document.getElementById("id_showing");
+			  element1.classList.add("active");
+			  element1.classList.add("active_bg");
+			  element2.classList.remove("active");
+			  element2.classList.add("remove_bg");
+
+			  var html = `
+						  <div class="row">
+							{% for i in range(4)%}
+							{% if i >= total_movie_2 %}
+							<div class="col movie-sub1 card m-2" style="width: 18rem;">
+							</div>
+							{% else %}
+							<div class="col movie-sub1 card m-2" style="width: 18rem;">
+							  <img src="{{final_list[i]['poster_url']}}" class="card-img-top" alt="...">
+							  <div class="card-body">
+							<h5 class="card-title" style="color:ghostwhite">{{final_list[i]['title']}}</h5>
+							<p class="card-text"></p>
+							<a href="/movies/{{final_list[i]['_id']}}" class="btn btn-primary">Get Tickets</a>
+							  </div>
+							</div>
+							{% endif %}
+							{% endfor %}
+							</div>
+						`;
+			  var elementDiv = document.getElementById("showing_movies");
+			  elementDiv.innerHTML = html
+
+				document.getElementById("see_all").href="/movies/2";
+
+			  // const xhttp = new XMLHttpRequest();
+			  // xhttp.onload = function() {
+				// console.log("Okay")
+			  // }
+			  // xhttp.open("POST", "/");
+			  // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			  // var flg = "2";
+			  // xhttp.send("flg="+ flg);
+			}
+
+		</script>
+    </head>
+
+    <body>
+		{% include "header.html" %}
+
+	<!-- image carousel start -->
+	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+	  <ol class="carousel-indicators">
+		<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+		<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+		<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+	  </ol>
+	  <div class="carousel-inner">
+		<div class="carousel-item active">
+		  <img class="d-block w-100" src="static/img/s1.jpg" width="100%" height="500px" alt="First slide">
+		  <div class="carousel-caption d-none d-md-block">
+			<h5><b>Tmp Title</b></h5>
+			<p><b>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard </b></p>
+		  </div>
+		</div>
+		<div class="carousel-item">
+		  <img class="d-block w-100" src="static/img/s2.jpg" width="100%" height="500px" alt="Second slide">
+		  <div class="carousel-caption d-none d-md-block">
+			<h5><b>Tmp Title</b></h5>
+			<p><b>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard</b> </p>
+		  </div>
+		</div>
+		<div class="carousel-item">
+		  <img class="d-block w-100" src="static/img/s3.jpg" width="100%" height="500px" alt="Third slide">
+		  <div class="carousel-caption d-none d-md-block">
+			<h5><b>Tmp Title</b></h5>
+			<p><b>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard </b></p>
+		  </div>
+		</div>
+	  </div>
+	  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	  </a>
+	  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	  </a>
+	</div>
+	<!-- image carousel end -->
+
+	<!-- Movie sub section -->
+	<div class="container ">
+	<div class="movie-sub1 card text-center">
+		<div class="card-header">
+			<ul class="nav nav-tabs card-header-tabs">
+			  <li class="nav-item">
+				<button type="button" id="id_showing" class="nav-link active" style="" aria-current="true" onclick="func_showing()">Now Showing</button>
+			  </li>
+			  <li class="nav-item">
+				<button type="button" id="id_coming" class="nav-link" style="" onclick="func_coming()">Coming Soon</button>
+			  </li>
+			</ul>
+			<div align="right">
+				   <a id="see_all" class="btn btn-primary" href="/movies/1">See All</a>
+			</div>
+		</div>
+
+		<div id="showing_movies">
+
+			<div class="row">
+			{% for i in range(4)%}
+				{% if i >= total_movie %}
+					<div class="col movie-sub1 card m-2" style="width: 18rem;">
+					</div>
+				{% else %}
+					<div class="col movie-sub1 card m-2" style="width: 18rem;">
+					  <img src="{{movie_info_by_id_sorted[i]['poster_url']}}" class="card-img-top"  alt="...">
+					  <div class="card-body">
+						<h5 class="card-title" style="color:ghostwhite">{{movie_info_by_id_sorted[i]['title']}}</h5>
+						<p class="card-text"></p>
+						<a href="/movies/{{movie_info_by_id_sorted[i]['_id']}}" class="btn btn-primary">Get Tickets</a>
+					  </div>
+					</div>
+				{% endif %}
+
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<!-- MSE -->
+
+	<!-- News sub section -->
+	<div class="container ">
+	<div class="movie-sub1 card text-center">
+		<div class="card-header">
+			<ul class="nav nav-tabs card-header-tabs">
+			  <li class="nav-item">
+				<a class="nav-link active" aria-current="true" href="#">Latest News</a>
+			  </li>
+			</ul>
+		</div>
+		<div class="row">
+			<div class="col card mb-3 m-2" style="max-width: 540px;">
+			  <div class="row g-0">
+				<div class="col-md-4">
+				  <img src="static/img/1.jpg" class="img-fluid rounded-start" alt="...">
+				</div>
+				<div class="col-md-8">
+				  <div class="card-body">
+					<h5 class="card-title">News title</h5>
+					<p class="card-text">simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+					<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+					<a href="#" class="btn btn-primary">Read</a>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<div class="col card mb-3 m-2" style="max-width: 540px;">
+			  <div class="row g-0">
+				<div class="col-md-4">
+				  <img src="static/img/1.jpg" class="img-fluid rounded-start" alt="...">
+				</div>
+				<div class="col-md-8">
+				  <div class="card-body">
+					<h5 class="card-title">News title</h5>
+					<p class="card-text">simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+					<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+					<a href="#" class="btn btn-primary">Read</a>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<div class="col card mb-3 m-2" style="max-width: 540px;">
+			  <div class="row g-0">
+				<div class="col-md-4">
+				  <img src="static/img/1.jpg" class="img-fluid rounded-start" alt="...">
+				</div>
+				<div class="col-md-8">
+				  <div class="card-body">
+					<h5 class="card-title">News title</h5>
+					<p class="card-text">simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+					<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+					<a href="#" class="btn btn-primary">Read</a>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	{% include "footer.html" %}
+
+    </body>
+
+</html>

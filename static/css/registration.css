@@ -1,0 +1,59 @@
+body{
+	background-image: url(https://cdn.discordapp.com/attachments/1051562414405079135/1055219309921701928/image.png);
+	font-size: 16px;
+	font-weight: bold;
+}
+form{
+}
+
+.register-box{
+	height: 500px;
+	width: 400px;
+	margin: auto;
+	font-family: sans-serif;
+	border-radius: 10px;
+	background-color: #72b7c0;
+	padding: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+.container{
+	text-align: center;
+}
+
+
+input[type=text], input[type=password] {
+	width: 100%;
+	padding: 20px 15px;
+	margin: 0px 0px 20px 0px;
+	display: inline-block;
+	border: 2px solid rgba(0,0,0,0.5);
+	border-radius: 10px;
+	box-sizing: border-box;
+}
+
+::placeholder{
+	font: 16px sans-serif;
+	overflow: visible;
+}
+
+.btn-new, .btn-new:visited{
+	width: 60%;
+	height: 55px;
+	border-radius:10px;
+	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+	color: #000 !important;
+	border: 3px solid #176DC1 !important;
+	background-color: #67B2FC !important;
+	font-size: 20px;
+}
+.btn-new:hover {
+	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+}
+.btn-new:active {
+	background-color: #56a0e9 !important;
+	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+}

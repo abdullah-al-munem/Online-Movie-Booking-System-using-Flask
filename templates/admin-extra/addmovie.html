@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Add Movie</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/admin-crud.css') }}"/>
+
+    <script>
+        function submitMovieForm() {
+            var title = document.getElementById("title").value;
+            var poster_url = document.getElementById("poster_url").value;
+            var category = document.getElementById("category").value;
+            var duration = document.getElementById("duration").value;
+            var actors = document.getElementById("actors").value;
+            var genre = document.getElementById("genre").value;
+            var language = document.getElementById("language").value;
+            var release = document.getElementById("release").value;
+            var rating = document.getElementById("rating").value;
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                $("#modal-movie").modal('show');
+            }
+            xhttp.open("POST", "/addmovie");
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+
+            var params = "title=" + title + "&poster_url=" + poster_url + "&category=" + category + "&duration=" + duration + "&actors=" + actors + "&genre=" + genre + "&language=" + language + "&release=" + release + "&rating=" + rating;
+            xhttp.send(params);
+        }
+        // $(document).on('change', '.file-input', function() {
+        //
+        //
+		// 	var filesCount = $(this)[0].files.length;
+        //
+		// 	var textbox = $(this).prev();
+        //
+		// 	if (filesCount === 1) {
+		// 	var fileName = $(this).val().split('\\').pop();
+		// 	textbox.text(fileName);
+		// 	} else {
+		// 	textbox.text(filesCount + ' files selected');
+		// 	}
+        //
+        //
+        //
+		// 	if (typeof (FileReader) != "undefined") {
+        //         var dvPreview = $("#divImageMediaPreview");
+        //         dvPreview.html("");
+        //         $($(this)[0].files).each(function () {
+        //             var file = $(this);
+        //                 var reader = new FileReader();
+        //                 reader.onload = function (e) {
+        //                     var img = $("<img />");
+        //                     img.attr("style", "width: 150px; height:100px; padding: 10px");
+        //                     img.attr("src", e.target.result);
+        //                     dvPreview.append(img);
+        //                 }
+        //                 reader.readAsDataURL(file[0]);
+        //         });
+        //     } else {
+        //         alert("This browser does not support HTML5 FileReader.");
+        //     }
+        //
+        //
+        // });
+    </script>
+
+</head>
+<body>
+<div class="container form-section">
+
+    <div class="container form-container">
+        <!-- The Modal -->
+        <div class="modal" id="modal-movie">
+            <div class="modal-dialog modal-fullscreen-sm-down">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Message</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body" id="modal-movie-message">Added successfully.</div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-3">
+
+            <h2>Add Movie</h2>
+            <p>Provide movie information below:</p>
+
+            <form onsubmit="submitMovieForm();return false;">
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="text" class="form-control" id="title" placeholder="Title" name="title">
+                    <label for="title">Title</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="url" class="form-control" id="poster_url" placeholder="Poster URL"
+                           name="poster_url">
+                    <label for="poster_url">Poster Url</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <div class="file-drop-area">
+                        <span class="choose-file-button">Choose Files</span>
+                        <span class="file-message">or drag and drop files here</span>
+                        <input type="file" class="file-input" accept=".jfif,.jpg,.jpeg,.png,.gif" multiple>
+                    </div>
+                    <div id="divImageMediaPreview"> </div>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="text" class="form-control" id="category" placeholder="Category"
+                           name="category">
+                    <label for="category">Category</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="text" class="form-control" id="duration" placeholder="Duration"
+                           name="duration">
+                    <label for="duration">Duration</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="text" class="form-control" id="actors" placeholder="Actors" name="actors">
+                    <label for="actors">Actors</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="text" class="form-control" id="genre" placeholder="Genre" name="genre">
+                    <label for="genre">Genre</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="text" class="form-control" id="language" placeholder="Language"
+                           name="language">
+                    <label for="language">Language</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input required type="date" name="release" id="release" class="form-select">
+                    <label for="release">Release</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                    <input required type="number" class="form-control" id="rating" placeholder="Rating" name="rating"
+                           min="0" max="10" step=".1">
+                    <label for="rating">Rating</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
